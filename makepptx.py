@@ -166,47 +166,6 @@ for i, name in enumerate(['高評価数', '低評価数', 'コメント数']):
 
 like_count_rank_table = make_table(weekly_slide[5], 5, 50, 1000, 800, 150, '動画の長さのランキング', '', col_q=3, col_3_w=150)
 make_rank_table(like_count_rank_table, rank_df[8], text_long=35, text_size=20, title_size=23)
-"""
-for i, w_g in enumerate(weekly_graphs):
-    slide = add_slide(weekly_ppt)
-    slide.shapes.add_picture(w_g, Pt(50), Pt(50), width=Pt(2300), height=Pt(900))
-    graph_name = os.path.splitext(os.path.basename(w_g))[0]
-    w_g_col = graph_name[4:]
-    rank_all = []
-    if w_g_col in df_rank.columns:
-        col = df_rank[w_g_col]
-        rank_all = pd.concat([df_weekly[col == 1][['期間', w_g_col]],
-                              df_weekly[col == 2][['期間', w_g_col]],
-                              df_weekly[col == 3][['期間', w_g_col]],
-                              df_weekly[col == 4][['期間', w_g_col]],
-                              df_weekly[col == 5][['期間', w_g_col]]])
-
-        weekly = make_table(slide, 5, 2, 50, 1000, 370, 250, '週の順位', w_g_col)
-        change_cell_font_and_size(weekly.cell(0, 0), font_text, 35)
-        change_cell_font_and_size(weekly.cell(0, 1), font_text, 35)
-        for j in range(5):
-            weekly.cell(j+1, 0).text = rank_all.iloc[j, 0]
-            change_cell_font_and_size(weekly.cell(j+1, 0), font_text, 30)
-            weekly.cell(j+1, 1).text = str(rank_all.iloc[j, 1])
-            change_cell_font_and_size(weekly.cell(j+1, 1), font_text, 30)
-
-    if w_g_col in df_rank_2.columns:
-        col = df_rank_2[w_g_col]
-        rank_week = pd.concat([df_video_this_week[col == 1][['タイトル', w_g_col]],  # col == 1 df_rank_2で一位の行番号
-                               df_video_this_week[col == 2][['タイトル', w_g_col]],
-                               df_video_this_week[col == 3][['タイトル', w_g_col]],
-                               df_video_this_week[col == 4][['タイトル', w_g_col]],
-                               df_video_this_week[col == 5][['タイトル', w_g_col]]])
-
-        rank_weekly = make_table(slide, 5, 2, 720, 1000, 1380, 250, '週の動画の順位', w_g_col)
-        change_cell_font_and_size(rank_weekly.cell(0, 0), font_text, 35)
-        change_cell_font_and_size(rank_weekly.cell(0, 1), font_text, 35)
-        for j in range(5):
-            rank_weekly.cell(j+1, 0).text = rank_week.iloc[j, 0]
-            change_cell_font_and_size(rank_weekly.cell(j+1, 0), font_text, 30)
-            rank_weekly.cell(j+1, 1).text = str(round(rank_week.iloc[j, 1], 2))
-            change_cell_font_and_size(rank_weekly.cell(j+1, 1), font_text, 30)
-"""
 
 # 伸びのランキング(今週)
 nobi_slide = add_slide(weekly_ppt)

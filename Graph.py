@@ -47,16 +47,16 @@ def make_daily_graph(df_v, df_vct, option):
         plt.cla()
 
 
-#make_daily_graph(df_videos_this, df_trans_this, '')
-#make_daily_graph(df_videos_last, df_trans_last, '_last')
+make_daily_graph(df_videos_this, df_trans_this, '')
+make_daily_graph(df_videos_last, df_trans_last, '_last')
 
 # 　こっから動画ごとのグラフ
 basedata_folder_path = 'H:/Youtube/basedata/'
 basedata = glob(basedata_folder_path + '*.xlsx')[-1]
 
-#df_n = pd.read_excel(basedata, sheet_name='推移', index_col=0)[-200:]  # 直近200のデータ
-#quantile25 = df_n.quantile(q=[0.25], numeric_only=True)
-#quantile75 = df_n.quantile(q=[0.75], numeric_only=True)
+df_n = pd.read_excel(basedata, sheet_name='推移', index_col=0)[-200:]  # 直近200のデータ
+quantile25 = df_n.quantile(q=[0.25], numeric_only=True)
+quantile75 = df_n.quantile(q=[0.75], numeric_only=True)
 
 
 def graph_video(df_v, df_vc_t, option):
@@ -83,8 +83,8 @@ def graph_video(df_v, df_vc_t, option):
         plt.cla()
 
 
-#graph_video(df_videos_this, df_trans_this, '')  # 今週の
-#graph_video(df_videos_last, df_trans_last, '_last')  # 先週の
+graph_video(df_videos_this, df_trans_this, '')  # 今週の
+graph_video(df_videos_last, df_trans_last, '_last')  # 先週の
 
 # こっから週間の推移のグラフ
 

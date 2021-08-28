@@ -117,12 +117,15 @@ def add_change_and_so_on(bar_graph, axes, place='center', color='white'):
                       xytext=(0, -40), fontsize=14, color=color, ha='center', textcoords="offset points")
 
 
-fig_w = plt.figure(figsize=(23.0, 9.0), tight_layout=True)  # 高評価と低評価
+fig_size_x = 23.5
+fig_size_y = 9.0
+
+fig_w = plt.figure(figsize=(fig_size_x, fig_size_y), tight_layout=True)  # 高評価と低評価
 ax_rate_1 = fig_w.add_subplot()
 ax_rate_2 = ax_rate_1.twinx()
 ax_rate_1.plot(df_weekly.iloc[:-1, 8], color='#e06666', linewidth=3)
 ax_rate_1.plot(df_weekly.iloc[:-1, 10]*20, color='#6fa8dc', linewidth=3)
-ax_rate_1.bar(x_ticks, df_weekly.iloc[:-1, 14]/75, color='#d9d9d9', zorder=0)
+ax_rate_1.bar(x_ticks, df_weekly.iloc[:-1, 14]/75, color='#a4c2f4', zorder=0, alpha=0.7)
 ax_rate_2.plot(df_weekly.iloc[:-1, 20], color='#8e7cc3', linewidth=2, linestyle='--')
 like_c = ax_rate_1.bar(x_ticks, df_weekly.iloc[:-1, 8], alpha=0, width=0.2)
 unlike_c = ax_rate_1.bar(x_ticks, df_weekly.iloc[:-1, 10]*20, alpha=0, width=0.2)
@@ -135,13 +138,14 @@ ax_rate_2.set_ylim(0)
 ax_rate_1.set_ylabel('高評価数(個),低評価数x20(個)', fontname=font)
 ax_rate_2.set_ylabel('高評価数/低評価数', fontname=font)
 ax_rate_2.grid(False)
+ax_rate_1.grid(color='black', linestyle=':')
 plt.title('高評価数と低評価数(と再生数)', fontname=font)
-fig_w.savefig(weekly_path + '/002_高評価数と低評価数.png')
+fig_w.savefig(weekly_path + '/002_高評価数と低評価数.png', transparent=True)
 plt.close('all')
 
 
 def make_weekly_graph_1(name, color, col_num_list, number):
-    fig_g = plt.figure(figsize=(23.0, 9.0), tight_layout=True)
+    fig_g = plt.figure(figsize=(fig_size_x, fig_size_y), tight_layout=True)
     ax1 = fig_g.add_subplot(211)
     ax2 = fig_g.add_subplot(212)
     ax1_2 = ax1.twinx()
@@ -159,8 +163,10 @@ def make_weekly_graph_1(name, color, col_num_list, number):
     ax2_2.axis('off')
     ax1.set_ylabel('高評価数(破線：平均x30)', fontname=font)
     ax2.set_ylabel('1000再生あたり高評価数', fontname=font)
+    ax1.grid(color='black', linestyle=':')
+    ax2.grid(color='black', linestyle=':')
     plt.title(name, fontname=font)
-    fig_g.savefig(weekly_path+'/10'+str(number)+'_'+name+'.png')
+    fig_g.savefig(weekly_path+'/10'+str(number)+'_'+name+'.png', transparent=True)
     plt.close('all')
 
 
@@ -168,7 +174,7 @@ make_weekly_graph_1('高評価数', '#e06666', [8, 9, 17], 1)
 make_weekly_graph_1('低評価数', '#6fa8dc', [10, 11, 18], 2)
 make_weekly_graph_1('コメント数', '#93c47d', [12, 13, 19], 3)
 
-fig_w = plt.figure(figsize=(23.0, 9.0), tight_layout=True)
+fig_w = plt.figure(figsize=(fig_size_x, fig_size_y), tight_layout=True)
 ax_w_1 = fig_w.add_subplot()  # 再生数
 ax_w_2 = ax_w_1.twinx()
 total_view = ax_w_1.bar(x_ticks, df_weekly.iloc[:-1, 16], alpha=0.9, color='#a4c2f4', edgecolor="#4a86e8", linewidth=2)
@@ -186,17 +192,18 @@ ax_w_1.set_ylabel('再生数', fontname=font)
 ax_w_2.set_ylabel('平均再生数', fontname=font)
 ax_w_2.set_ylim(100000, 300000)
 ax_w_2.grid(False)
+ax_w_1.grid(color='black', linestyle=':')
 plt.title('週間総再生数とその内その週に投稿された動画の割合、平均再生数', fontname=font)
-fig_w.savefig(weekly_path + '/001_再生数.png')
+fig_w.savefig(weekly_path + '/001_再生数.png', transparent=True)
 plt.close('all')
 
-fig_w = plt.figure(figsize=(23.0, 9.0), tight_layout=True)
+fig_w = plt.figure(figsize=(fig_size_x, fig_size_y), tight_layout=True)
 ax_w_1 = fig_w.add_subplot()  # 長さ
 ax_w_2 = ax_w_1.twinx()
-duration = ax_w_1.bar(x_ticks, df_weekly.iloc[:-1, 6], alpha=0.9, color='silver')
+duration = ax_w_1.bar(x_ticks, df_weekly.iloc[:-1, 6], alpha=0.9, color='#a4c2f4')
 ax_w_2.plot(df_weekly.iloc[:-1, 7],  color='#e06666', linewidth=3)
 avg_duration = ax_w_2.bar(x_ticks, df_weekly.iloc[:-1, 7], alpha=0, width=0.2)
-duration[-1].set_color("coral")
+duration[-1].set_color("#4a86e8")
 ax_w_1.bar_label(duration, label_type='center', color='white', fmt='%.2f', fontsize=15)
 add_rank_to_bar(duration, ax_w_1, "長さ(分)", 'white')
 add_rank_to_bar(avg_duration, ax_w_2, '長さ(分)_平均', '#e06666', y_offset=5, f_size=20, y_position=0, mod='(Avg)')
@@ -206,17 +213,19 @@ ax_w_2.set_ylim(bottom=0)
 ax_w_2.grid(False)
 ax_w_1.set_ylabel('動画長(分)', fontname=font)
 ax_w_2.set_ylabel('平均動画長(分)', fontname=font)
+ax_w_1.grid(color='black', linestyle=':')
 plt.title('動画の長さ', fontname=font)
-fig_w.savefig(weekly_path + '/200_長さ.png')
+fig_w.savefig(weekly_path + '/200_長さ.png', transparent=True)
 
-fig_w = plt.figure(figsize=(23.0, 12.37), tight_layout=True)  # 動画数
+fig_w = plt.figure(figsize=(fig_size_x, 12.37), tight_layout=True)  # 動画数
 ax_w = fig_w.add_subplot()
-g = ax_w.bar(x_ticks, df_weekly.iloc[:-1, 5], alpha=0.9, color='silver')
-g[-1].set_color("coral")
+g = ax_w.bar(x_ticks, df_weekly.iloc[:-1, 5], alpha=0.9, color='#a4c2f4')
+g[-1].set_color("#4a86e8")
 ax_w.set_ylim(bottom=0)
 ax_w.bar_label(g, label_type='center', color='white', fmt='%.2f', fontsize=15)
 add_rank_to_bar(g, ax_w, '動画数(個)', 'white')
 add_change_and_so_on(g, ax_w)
+ax_w.grid(color='black', linestyle=':')
 plt.title('動画数(個)', fontname=font)
-fig_w.savefig(weekly_path + '/000_動画数.png')
+fig_w.savefig(weekly_path + '/000_動画数.png', transparent=True)
 plt.close('all')

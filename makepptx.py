@@ -39,7 +39,7 @@ def add_slide(ppt):
     return slide
 
 
-def make_table(slide_name, row_q, x, y, col_1_w, col_2_w, col_1_title, col_2_title, col_q=2, col_3_w=0):
+def make_table(slide_name, row_q, x, y, col_1_w, col_2_w, col_1_title, col_2_title, col_q=2, col_3_w=0, style='blue'):
     table = slide_name.shapes.add_table(row_q + 1, col_q, Pt(x), Pt(y), Pt(0), Pt(0)).table
     table.columns[0].width = Pt(col_1_w)
     table.columns[1].width = Pt(col_2_w)
@@ -47,6 +47,10 @@ def make_table(slide_name, row_q, x, y, col_1_w, col_2_w, col_1_title, col_2_tit
     table.cell(0, 1).text = col_2_title
     if col_3_w != 0:
         table.columns[2].width = Pt(col_3_w)
+    if style == 'red':
+        tbl = table._graphic_frame.element.graphic.graphicData.tbl
+        style_id = '{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}' #UUIDはgithub参照
+        tbl[0][-1].text = style_id
     return table
 
 
@@ -108,6 +112,7 @@ for i, col in enumerate(col_list):
 weekly_graphs = glob.glob(folders[-2] + '/weekly/*.png')
 df_rank = df_weekly.rank(numeric_only=True, ascending=False, method='dense')
 df_rank_2 = df_video_this_week.rank(numeric_only=True, ascending=False, method='dense')
+df_rank_3 = df_video_this_week.rank(numeric_only=True, ascending=True, method='dense')
 
 
 def make_rank_df(rank_df, base_df, col_name, base_col_name):
@@ -132,40 +137,48 @@ def make_rank_table(rank_table, rank_df, text_long=100, text_size=30, title_size
 
 
 video_num_slide = add_slide(weekly_ppt)  # 動画数
-video_num_slide.shapes.add_picture(weekly_graphs[0], Pt(50), Pt(50), width=Pt(2300), height=Pt(1237))
+video_num_slide.shapes.add_picture(weekly_graphs[0], Pt(50), Pt(50), width=Pt(2350), height=Pt(1237))
 
 weekly_slide = []
 for i in range(1,7):
     weekly_slide.append(add_slide(weekly_ppt))  # 再生数
-    weekly_slide[i-1].shapes.add_picture(weekly_graphs[i], Pt(50), Pt(50), width=Pt(2300), height=Pt(900))
+    weekly_slide[i-1].shapes.add_picture(weekly_graphs[i], Pt(25), Pt(25), width=Pt(2350), height=Pt(900))
 
 col_list = ['再生数', '高評価-低評価比率', '高評価数', '高評価数(再生数比x1000)', '低評価数', '低評価数(再生数比x1000)',
             'コメント数', 'コメント数(再生数比x1000)', '長さ(分)']
-rank_df = []
+des_rank_df = []
+asc_rank_df = []
 for i, col in enumerate(col_list):
-    rank_df.append(make_rank_df(df_rank_2, df_video_this_week, col, 'タイトル'))
+    des_rank_df.append(make_rank_df(df_rank_2, df_video_this_week, col, 'タイトル'))
+    asc_rank_df.append(make_rank_df(df_rank_3, df_video_this_week, col, 'タイトル'))
+
 view_count_rank_table = make_table(weekly_slide[0], 5, 50, 1000, 100, 1400, 'Rank', '再生数の順位', col_q=3, col_3_w=150)
-make_rank_table(view_count_rank_table, rank_df[0])
-like_count_rank_table = make_table(weekly_slide[1], 5, 50, 1000, 50, 600, 'R', '高評価数の順位', col_q=3, col_3_w=150)
-unlike_count_rank_table = make_table(weekly_slide[1], 5, 800, 1000, 50, 600, 'R', '低評価数の順位', col_q=3, col_3_w=150)
-like_unlike_ratio_rank_table = make_table(weekly_slide[1], 5, 1550, 1000, 50, 600, 'R', '高-低評価比率の順位', col_q=3, col_3_w=150)
-make_rank_table(like_count_rank_table, rank_df[2], text_long=30, text_size=20, title_size=23)
-make_rank_table(unlike_count_rank_table, rank_df[4], text_long=30, text_size=20, title_size=23)
-make_rank_table(like_unlike_ratio_rank_table, rank_df[1], text_long=30, text_size=20, title_size=23)
+make_rank_table(view_count_rank_table, des_rank_df[0])
+like_count_rank_table = make_table(weekly_slide[1], 5, 50, 1000, 50, 600, 'R', '高評価数の順位', col_q=3, col_3_w=80)
+unlike_count_rank_table = make_table(weekly_slide[1], 5, 800, 1000, 50, 600, 'R', '低評価数の順位', col_q=3, col_3_w=80)
+like_unlike_ratio_rank_table = make_table(weekly_slide[1], 5, 1550, 1000, 50, 600, 'R', '高-低評価比率の順位', col_q=3, col_3_w=100)
+make_rank_table(like_count_rank_table, des_rank_df[2], text_long=30, text_size=20, title_size=23)
+make_rank_table(unlike_count_rank_table, des_rank_df[4], text_long=30, text_size=20, title_size=23)
+make_rank_table(like_unlike_ratio_rank_table, des_rank_df[1], text_long=30, text_size=20, title_size=23)
 
 k = 1
 for i, name in enumerate(['高評価数', '低評価数', 'コメント数']):
-    count_rank_table = make_table(weekly_slide[i+2], 5, 50, 950, 50, 800, 'R', name+'のランキング(上から5本)', col_q=3, col_3_w=100)
-    count_rank2_table = make_table(weekly_slide[i+2], 5, 50, 1170, 50, 800, 'R', name+'のランキング(下から5本)', col_q=3, col_3_w=100)
-    count_per_rank_table = make_table(weekly_slide[i+2], 5, 1050, 1000, 50, 800, 'R', '1000再生あたりの'+name+'のランキング', col_q=3, col_3_w=100)
+    count_rank_table = make_table(weekly_slide[i+2], 5, 50, 930, 80, 900, 'Rank', name+'のランキング(上から5本)', col_q=3, col_3_w=100)
+    count_rank2_table = make_table(weekly_slide[i+2], 5, 50, 1140, 80, 900, 'Rank', name+'のランキング(下から5本)', col_q=3, col_3_w=100, style='red')
+    count_per_rank_table = make_table(weekly_slide[i+2], 5, 1300, 930, 80, 900, 'Rank', '1000再生あたりの'+name+'のランキング(上から5本)', col_q=3, col_3_w=100)
+    count_per_rank2_table = make_table(weekly_slide[i+2], 5, 1300, 1140, 80, 900, 'Rank', '1000再生あたりの'+name+'のランキング(下から5本)', col_q=3, col_3_w=100, style='red')
     k += 1
-    make_rank_table(count_rank_table, rank_df[k], text_long=35, text_size=20, title_size=23)
+    make_rank_table(count_rank_table, des_rank_df[k], text_long=40, text_size=20, title_size=23)
+    make_rank_table(count_rank2_table, asc_rank_df[k], text_long=40, text_size=20, title_size=23)
     k += 1
-    make_rank_table(count_per_rank_table, rank_df[k], text_long=35, text_size=20, title_size=23)
+    make_rank_table(count_per_rank_table, des_rank_df[k], text_long=40, text_size=20, title_size=23)
+    make_rank_table(count_per_rank2_table, asc_rank_df[k], text_long=40, text_size=20, title_size=23)
 
 
-like_count_rank_table = make_table(weekly_slide[5], 5, 50, 1000, 800, 150, '動画の長さのランキング', '', col_q=3, col_3_w=150)
-make_rank_table(like_count_rank_table, rank_df[8], text_long=35, text_size=20, title_size=23)
+duration_rank_table = make_table(weekly_slide[5], 5, 50, 1000, 90, 850,'Rank', '動画の長さのランキング(上から5本)', col_q=3, col_3_w=120)
+duration_rank2_table = make_table(weekly_slide[5], 5, 1250, 1000, 90, 850,'Rank', '動画の長さのランキング(下から5本)', col_q=3, col_3_w=100, style='red')
+make_rank_table(duration_rank_table, des_rank_df[8], text_long=35, text_size=25, title_size=30)
+make_rank_table(duration_rank2_table, asc_rank_df[8], text_long=35, text_size=25, title_size=30)
 
 # 伸びのランキング(今週)
 nobi_slide = add_slide(weekly_ppt)
@@ -218,7 +231,7 @@ for title_nobi_last in ['伸び12時間', '伸び48時間', '伸び96時間', '�
         change_cell_font_and_size(nobi_last_table.cell(i + 1, 2), 20)
 add_slide(weekly_ppt)
 weekly_ppt.save(folders[-2] + "/weekly.pptx")
-exit()
+
 
 # 動画ごとのスライド
 def make_daily_pptx(option, df, df_rank):

@@ -5,6 +5,10 @@ import gspread as gs
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials as SACs
 import openpyxl
+import logging
+
+nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
+logging.basicConfig(filename='H:/log/make_vct'+nowtime+'.log', level=logging.DEBUG)
 
 api_scope = ['https://www.googleapis.com/auth/spreadsheets',  # 利用する API を指定する
              'https://www.googleapis.com/auth/drive']
@@ -17,7 +21,7 @@ ss = gspread_client.open_by_key('1-8QnVNtgva-D10P6uBgbosStPUiwq82tzcdEiaiKx8U')
 s_vct = ss.get_worksheet(3)
 vct = s_vct.get_all_values()
 hour_df = pd.DataFrame(vct)
-print(hour_df)
+logging.info(hour_df)
 
 folder_path = 'H:/Youtube/basedata/vct/'
 os.makedirs(folder_path, exist_ok=True)  # vctフォルダー作成
@@ -36,10 +40,10 @@ s_vct.resize(cols=1)  # VideoID以外削除
 wb = openpyxl.load_workbook(filepath)
 sheet = wb.create_sheet()
 for i in range(len(df_merged)-1):
+    print(i)
     shaped_row = df_merged.iloc[i+1].dropna()
 
     for j, element in enumerate(shaped_row):
-        print(j)
         sheet.cell(i+2, column=j+1, value=element)
 
 for i in range(sheet.max_column-1):

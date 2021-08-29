@@ -152,14 +152,23 @@ for i, col in enumerate(col_list):
     des_rank_df.append(make_rank_df(df_rank_2, df_video_this_week, col, 'タイトル'))
     asc_rank_df.append(make_rank_df(df_rank_3, df_video_this_week, col, 'タイトル'))
 
-view_count_rank_table = make_table(weekly_slide[0], 5, 50, 1000, 100, 1400, 'Rank', '再生数の順位', col_q=3, col_3_w=150)
-make_rank_table(view_count_rank_table, des_rank_df[0])
-like_count_rank_table = make_table(weekly_slide[1], 5, 50, 1000, 50, 600, 'R', '高評価数の順位', col_q=3, col_3_w=80)
-unlike_count_rank_table = make_table(weekly_slide[1], 5, 800, 1000, 50, 600, 'R', '低評価数の順位', col_q=3, col_3_w=80)
-like_unlike_ratio_rank_table = make_table(weekly_slide[1], 5, 1550, 1000, 50, 600, 'R', '高-低評価比率の順位', col_q=3, col_3_w=100)
-make_rank_table(like_count_rank_table, des_rank_df[2], text_long=30, text_size=20, title_size=23)
-make_rank_table(unlike_count_rank_table, des_rank_df[4], text_long=30, text_size=20, title_size=23)
-make_rank_table(like_unlike_ratio_rank_table, des_rank_df[1], text_long=30, text_size=20, title_size=23)
+view_count_rank_table = make_table(weekly_slide[0], 5, 50, 1000, 90, 850, 'Rank', '再生数の順位(上から5本)', col_q=3, col_3_w=150)
+view_count_rank2_table = make_table(weekly_slide[0], 5, 1250, 1000, 90, 850, 'Rank', '再生数の順位(下から5本)', col_q=3, col_3_w=150, style='red')
+make_rank_table(view_count_rank_table, des_rank_df[0], text_long=30, text_size=20, title_size=23)
+make_rank_table(view_count_rank2_table, asc_rank_df[0], text_long=30, text_size=20, title_size=23)
+like_count_rank_table = make_table(weekly_slide[1], 5, 50, 930, 50, 600, 'R', '高評価数の順位(上から5本)', col_q=3, col_3_w=80)
+unlike_count_rank_table = make_table(weekly_slide[1], 5, 800, 930, 50, 600, 'R', '低評価数の順位(上から5本)', col_q=3, col_3_w=80)
+like_unlike_ratio_rank_table = make_table(weekly_slide[1], 5, 1550, 930, 50, 600, 'R', '高-低評価比率の順位(上から5本)', col_q=3, col_3_w=100)
+like_count_rank2_table = make_table(weekly_slide[1], 5, 50, 1140, 50, 600, 'R', '高評価数の順位(下から5本)', col_q=3, col_3_w=80, style='red')
+unlike_count_rank2_table = make_table(weekly_slide[1], 5, 800, 1140, 50, 600, 'R', '低評価数の順位(下から5本)', col_q=3, col_3_w=80, style='red')
+like_unlike_ratio_rank2_table = make_table(weekly_slide[1], 5, 1550, 1140, 50, 600, 'R', '高-低評価比率の順位(下から5本)', col_q=3, col_3_w=100, style='red')
+make_rank_table(like_count_rank_table, des_rank_df[2], text_long=27, text_size=20, title_size=23)
+make_rank_table(unlike_count_rank_table, des_rank_df[4], text_long=27, text_size=20, title_size=23)
+make_rank_table(like_unlike_ratio_rank_table, des_rank_df[1], text_long=27, text_size=20, title_size=23)
+make_rank_table(like_count_rank2_table, asc_rank_df[2], text_long=27, text_size=20, title_size=23)
+make_rank_table(unlike_count_rank2_table, asc_rank_df[4], text_long=27, text_size=20, title_size=23)
+make_rank_table(like_unlike_ratio_rank2_table, asc_rank_df[1], text_long=27, text_size=20, title_size=23)
+
 
 k = 1
 for i, name in enumerate(['高評価数', '低評価数', 'コメント数']):

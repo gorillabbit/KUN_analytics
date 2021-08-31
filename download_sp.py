@@ -9,7 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials as SACs
 
 api_scope = ['https://www.googleapis.com/auth/spreadsheets',  # 利用する API を指定する
              'https://www.googleapis.com/auth/drive']
-credentials_path = 'H:/Projects/週刊KUN分析/analytics-315310-0789825df3f6.json'  # 先ほどダウンロードした json パスを指定する
+credentials_path = 'H:/Projects/analytics-315310-0789825df3f6.json'  # 先ほどダウンロードした json パスを指定する
 os.path.join(os.path.expanduser('~'), 'path', 'to', 'analytics-315310-0789825df3f6.json')
 credentials = SACs.from_json_keyfile_name(credentials_path, api_scope)  # json から Credentials 情報を取得
 gspread_client = gs.authorize(credentials)  # 認可されたクライアントを得る

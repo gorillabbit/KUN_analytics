@@ -51,3 +51,5 @@ for i in range(sheet.max_column-1):
     sheet.cell(1, column=2+i, value=i)  # 列と行の数字記入
 sheet.cell(1, column=1, value='videoID')
 wb.save(filepath)
+
+s_vct.resize(cols=1)

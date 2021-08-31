@@ -5,10 +5,10 @@ import os
 import openpyxl
 import pandas as pd
 
-basedata_folder_path = 'H:/Youtube/basedata/'
+basedata_folder_path = 'H:/Projects/basedata_KUN/'
 src = glob.glob(basedata_folder_path + '*.xlsx')[-1]
 print(src)
-management = 'H:/Youtube/管理.xlsx'
+management = 'H:/Projects/週刊KUN分析/管理.xlsx'
 
 # 期間の取得、ついでに期間を書き込む
 wb_management = openpyxl.load_workbook(management)
@@ -23,7 +23,7 @@ span_s_str = str(span_start)[:-9].replace('-', '')  # spanを作成
 span_e_str = str(span_end)[:-9].replace('-', '')
 span = span_s_str + '-' + span_e_str
 sheet_m.cell(row=last, column=1, value=span)
-main_folder = 'H:/Youtube/' + span
+main_folder = 'H:/Projects/週刊KUN分析/' + span
 os.makedirs(main_folder, exist_ok=True)  # フォルダ作成
 
 span_time = datetime.timedelta(days=7)  # 次の週の期間を入力

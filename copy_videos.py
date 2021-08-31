@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 import shutil
 
-p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく、動画の保存先も作成
-folder = [str(x) for x in p.iterdir() if x.is_dir()][-2]
+p = Path('H:\Projects\週刊KUN分析')  # フォルダを指定して色々取得しとく、動画の保存先も作成
+folder = [str(x) for x in p.iterdir() if x.is_dir()][-1]
 
 os.makedirs(folder + '/videos', exist_ok=True)
 

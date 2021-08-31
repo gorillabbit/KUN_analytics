@@ -24,7 +24,7 @@ vct = s_vct.get_all_values()
 hour_df = pd.DataFrame(vct)
 logging.info(hour_df)
 
-folder_path = 'H:/Youtube/basedata/vct/'
+folder_path = 'H:/Projects/basedata_KUN/vct/'
 os.makedirs(folder_path, exist_ok=True)  # vctフォルダー作成
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
 filepath = folder_path + 'vct_base' + nowtime + '.xlsx'

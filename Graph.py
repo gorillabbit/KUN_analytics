@@ -5,8 +5,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく
-folder = [str(x) for x in p.iterdir() if x.is_dir()][-2]
+p = Path('H:/Projects/週刊KUN分析')  # フォルダを指定して色々取得しとく
+folder = [str(x) for x in p.iterdir() if x.is_dir()][-1]
 srcs = glob(folder + '/*.xlsx')  # エクセルファイルからデータ取得
 
 df_trans_this = pd.read_excel(srcs[0])
@@ -51,7 +51,7 @@ make_daily_graph(df_videos_this, df_trans_this, '')
 make_daily_graph(df_videos_last, df_trans_last, '_last')
 
 # 　こっから動画ごとのグラフ
-basedata_folder_path = 'H:/Youtube/basedata/'
+basedata_folder_path = 'H:/Projects/basedata_KUN/'
 basedata = glob(basedata_folder_path + '*.xlsx')[-1]
 
 df_n = pd.read_excel(basedata, sheet_name='推移', index_col=0)[-200:]  # 直近200のデータ

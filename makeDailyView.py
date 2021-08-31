@@ -23,7 +23,7 @@ daily_df = pd.DataFrame(s_daily.get_all_values())
 print(daily_df)
 logging.info(daily_df)
 
-folder_path = 'H:/Youtube/basedata/daily/'
+folder_path = 'H:/Projects/basedata_KUN/daily/'
 os.makedirs(folder_path, exist_ok=True)  # dailyフォルダー作成
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
 filepath = folder_path + 'daily_base' + nowtime + '.xlsx'
@@ -36,4 +36,4 @@ df_merged = pd.merge(df_latest_daily, daily_df, on=0, how='outer')
 df_merged.columns = range(df_merged.shape[1])
 df_merged.to_excel(filepath, sheet_name='1時間ごとの再生数', index=False)
 
-# s_daily.resize(cols=1)  # VideoID以外削除
+s_daily.resize(cols=1)  # VideoID以外削除

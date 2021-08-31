@@ -10,13 +10,13 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_CONNECTOR
 from pptx.util import Pt
 
-p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく、動画の保存先も作成
-folders = [str(x) for x in p.iterdir() if x.is_dir()]
-srcs = glob.glob(folders[-2] + '/*.xlsx')  # エクセルファイルからデータ取得
+p = Path('H:/Projects/週刊KUN分析')  # フォルダを指定して色々取得しとく、動画の保存先も作成
+folders = [str(x) for x in p.iterdir() if x.is_dir()][-1]
+srcs = glob.glob(folders + '/*.xlsx')  # エクセルファイルからデータ取得
 
-background_path = 'H:/Youtube/background.png'
-mplus_bold = 'H:/Youtube/mplus-2m-bold.ttf'
-mplus_black = 'H:/Youtube/mplus-2c-black.ttf'
+background_path = 'H:/Projects/週刊KUN分析/background.png'
+mplus_bold = 'H:/Projects/週刊KUN分析/mplus-2m-bold.ttf'
+mplus_black = 'H:/Projects/週刊KUN分析/mplus-2c-black.ttf'
 fontcolor = '0x222222'
 
 df_trans_this_week = pd.read_excel(srcs[0])
@@ -109,7 +109,7 @@ for i, col in enumerate(col_list):
     change_cell_font_and_size(index.cell(i+1, 0), 30)
 
 # 週刊情報
-weekly_graphs = glob.glob(folders[-2] + '/weekly/*.png')
+weekly_graphs = glob.glob(folders + '/weekly/*.png')
 df_rank = df_weekly.rank(numeric_only=True, ascending=False, method='dense')
 df_rank_2 = df_video_this_week.rank(numeric_only=True, ascending=False, method='dense')
 df_rank_3 = df_video_this_week.rank(numeric_only=True, ascending=True, method='dense')
@@ -239,7 +239,7 @@ for title_nobi_last in ['伸び12時間', '伸び48時間', '伸び96時間', '�
         nobi_last_table.cell(i + 1, 2).text = str(nobi_last_rank.iloc[len(nobi_last_rank) - 1 - i, 1])
         change_cell_font_and_size(nobi_last_table.cell(i + 1, 2), 20)
 add_slide(weekly_ppt)
-weekly_ppt.save(folders[-2] + "/weekly.pptx")
+weekly_ppt.save(folders + "/weekly.pptx")
 
 
 # 動画ごとのスライド
@@ -248,9 +248,9 @@ def make_daily_pptx(option, df, df_rank):
     daily_ppt.slide_width = Pt(slide_width)
     daily_ppt.slide_height = Pt(slide_height)
 
-    daily_graphs = glob.glob(folders[-2] + '/vct_day' + option + '/*.png')
-    video_graphs = glob.glob(folders[-2] + '/vct_video' + option + '/*.png')
-    thumbnails = glob.glob(folders[-2] + '/thumbnail' + option + '/*.png')
+    daily_graphs = glob.glob(folders + '/vct_day' + option + '/*.png')
+    video_graphs = glob.glob(folders + '/vct_video' + option + '/*.png')
+    thumbnails = glob.glob(folders + '/thumbnail' + option + '/*.png')
 
     f_s_s = 35
     f_s_l = 65
@@ -339,7 +339,7 @@ def make_daily_pptx(option, df, df_rank):
             shape_slide(graph)
 
     add_slide(daily_ppt)
-    daily_ppt.save(folders[-2] + '/daily' + option + '.pptx')
+    daily_ppt.save(folders + '/daily' + option + '.pptx')
 
 
 make_daily_pptx('', df_video_this_week, df_rank_2)
@@ -350,9 +350,9 @@ for i in range(3):
     opening_ppt = Presentation()
     opening_ppt.slide_width = Pt(slide_width)
     opening_ppt.slide_height = Pt(slide_height)
-    thumbnail = 'H:/Youtube/thumbnail_'+str(i)+'.png'
+    thumbnail = 'H:/Projects/週刊KUN分析/thumbnail_'+str(i)+'.png'
     opening_slide = add_slide(opening_ppt)
 
     opening_slide.shapes.add_picture(thumbnail, Pt(0), Pt(0), width=Pt(slide_width), height=Pt(slide_height))
     make_text(opening_slide, 1000, 900, str(df_weekly.iloc[-2, 21]), font_size=200, font='M+ 2p black')
-    opening_ppt.save(folders[-2] + '/opening_slide_'+str(i)+'.pptx')
+    opening_ppt.save(folders + '/opening_slide_'+str(i)+'.pptx')

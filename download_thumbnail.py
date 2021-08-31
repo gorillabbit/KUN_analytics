@@ -8,13 +8,13 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく、動画の保存先も作成
-folders = [str(x) for x in p.iterdir() if x.is_dir()]
-srcs = glob(folders[-2] + '/*.xlsx')  # エクセルファイルからデータ取得
+p = Path('H:\Projects\週刊KUN分析')  # フォルダを指定して色々取得しとく、動画の保存先も作成
+folders = [str(x) for x in p.iterdir() if x.is_dir()][-1]
+srcs = glob(folders + '/*.xlsx')  # エクセルファイルからデータ取得
 
 
 def download_thumbnail(option, df):
-    tn_folder = folders[-2] + '/thumbnail' + option
+    tn_folder = folders + '/thumbnail' + option
     os.makedirs(tn_folder, exist_ok=True)
     print(df)
     thumbnail = df['サムネイル']

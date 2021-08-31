@@ -1,6 +1,4 @@
 import glob
-
-import make_vct
 import datetime
 import os
 import gspread as gs
@@ -17,7 +15,7 @@ gspread_client = gs.authorize(credentials)  # 認可されたクライアント�
 ss = gspread_client.open_by_key('1-8QnVNtgva-D10P6uBgbosStPUiwq82tzcdEiaiKx8U')
 
 s_base = ss.get_worksheet(0)
-s_daily = ss.get_worksheet(1)
+s_daily = glob.glob('H:/Youtube/basedata/daily/*.xlsx')[-1]
 s_hour = glob.glob('H:/Youtube/basedata/vct/*.xlsx')[-1]
 
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
@@ -30,14 +28,11 @@ filepath = folder_path + nowtime + '.xlsx'
 wb.save(filepath)
 
 base = s_base.get_all_records()  # シートからデータを入手し成形
-print(base)
 base_df = pd.DataFrame.from_records(base, columns=base[0].keys(), index='videoID')
-daily = s_daily.get_all_records()
-print(daily)
-daily_df = pd.DataFrame.from_records(daily, columns=daily[0].keys(), index='videoID')
+daily_df = pd.read_excel(s_daily, sheet_name='1時間ごとの再生数', skiprows=0)
 hour_df = pd.read_excel(s_hour, sheet_name='Sheet')
 
 with pd.ExcelWriter(filepath, engine="openpyxl", mode='a') as writer:  # エクセルファイルに記入
     base_df.to_excel(writer, sheet_name='base')
-    daily_df.to_excel(writer, sheet_name='日間再生数')
+    daily_df.to_excel(writer, sheet_name='日間再生数', index=False, header=False)
     hour_df.to_excel(writer, sheet_name='推移')

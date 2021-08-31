@@ -2,8 +2,8 @@ import datetime
 import glob
 import os
 
-import pandas as pd
 import openpyxl
+import pandas as pd
 
 basedata_folder_path = 'H:/Youtube/basedata/'
 src = glob.glob(basedata_folder_path + '*.xlsx')[-1]

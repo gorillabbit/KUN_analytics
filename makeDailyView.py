@@ -1,10 +1,11 @@
 import datetime
 import glob
+import logging
 import os
+
 import gspread as gs
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials as SACs
-import logging
 
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
 logging.basicConfig(filename='H:/log/make_daily_view' + nowtime + '.log', level=logging.DEBUG)

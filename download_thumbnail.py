@@ -1,11 +1,12 @@
 import os
 import urllib.request
-from pathlib import Path
 from glob import glob
-import pandas as pd
-from PIL import Image
+from pathlib import Path
+
 import cv2
 import numpy as np
+import pandas as pd
+from PIL import Image
 
 p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく、動画の保存先も作成
 folders = [str(x) for x in p.iterdir() if x.is_dir()]

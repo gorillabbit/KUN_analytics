@@ -4,11 +4,11 @@ import textwrap
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 from pptx import Presentation
-from pptx.util import Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_CONNECTOR
-import pandas as pd
+from pptx.util import Pt
 
 p = Path('H:/Youtube')  # フォルダを指定して色々取得しとく、動画の保存先も作成
 folders = [str(x) for x in p.iterdir() if x.is_dir()]

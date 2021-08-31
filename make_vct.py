@@ -1,11 +1,12 @@
 import datetime
 import glob
+import logging
 import os
+
 import gspread as gs
+import openpyxl
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials as SACs
-import openpyxl
-import logging
 
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
 logging.basicConfig(filename='H:/log/make_vct'+nowtime+'.log', level=logging.DEBUG)

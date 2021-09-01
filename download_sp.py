@@ -17,7 +17,7 @@ ss = gspread_client.open_by_key('1-8QnVNtgva-D10P6uBgbosStPUiwq82tzcdEiaiKx8U')
 
 s_base = ss.get_worksheet(0)
 s_daily = glob.glob('H:/Projects/basedata_KUN/daily/*.xlsx')[-1]
-s_hour = glob.glob('H:/Projects/basedata_KUN/vct/*.xlsx')[-1]
+s_hour = glob.glob('H:/Projects/basedata_KUN/vct/*_shaped.xlsx')[-1]
 
 nowtime = str(datetime.datetime.now()).replace(':', '-').replace('.', '-')
 wb = openpyxl.Workbook()

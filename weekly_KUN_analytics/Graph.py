@@ -41,7 +41,7 @@ def make_daily_graph(df_v, df_vct, option):
         plt.legend(bbox_to_anchor=(1, -0.07), loc='upper right', prop={'family': font})
         plt.title('再生数推移-' + date, fontname=font)
         plt.xlabel('投稿からの時間(時間)', fontname=font)
-        plt.ylabel('再生数(回)', fontname=font)
+        plt.ylabel('再生数(回)', )
         date_file = date.replace('/', '-')
         fig.savefig(vtc_path + '/' + date_file + '.png')
         plt.cla()

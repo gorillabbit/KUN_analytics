@@ -36,4 +36,4 @@ df_merged.columns = range(df_merged.shape[1])
 df_merged.to_excel(filepath, sheet_name='1時間ごとの再生数')
 
 s_vct.resize(cols=1)  # VideoID以外削除
-print(s_vct)
+logging.info(s_vct)

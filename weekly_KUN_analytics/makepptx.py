@@ -218,9 +218,9 @@ df_rank_last = df_video_last_week.rank(numeric_only=True, ascending=True, method
 make_nobi_rank_slide(['伸び12時間', '伸び48時間', '伸び96時間'], nobi_last_slide, len(df_video_last_week), '先週', df_rank_last, df_video_last_week)
 nobi_last_slide_2 = add_slide(weekly_ppt)
 make_nobi_rank_slide(['伸び144時間', '伸び192時間', '伸び240時間'], nobi_last_slide_2, len(df_video_last_week), '先週', df_rank_last, df_video_last_week)
-
 weekly_ppt.save(folders + '/weekly.pptx')
-exit()
+
+
 # 動画ごとのスライド
 def make_daily_pptx(option, df, df_rank):
     daily_ppt = Presentation()

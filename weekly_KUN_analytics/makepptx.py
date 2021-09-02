@@ -115,18 +115,18 @@ df_rank_2 = df_video_this_week.rank(numeric_only=True, ascending=False, method='
 df_rank_3 = df_video_this_week.rank(numeric_only=True, ascending=True, method='dense')
 
 
-def make_rank_df(rank_df, base_df, col_name, base_col_name):
+def make_rank_df(rank_df, base_df, col_name, base_col_name, row_count=5):
     _col = rank_df[col_name]
     df = base_df[_col == 1][[base_col_name, col_name]]
-    for k in range(4):
+    for k in range(row_count-1):
         df = pd.concat([df, base_df[_col == k+2][[base_col_name, col_name]]])
     return df
 
 
-def make_rank_table(rank_table, rank_df, text_long=100, text_size=30, title_size=35):
+def make_rank_table(rank_table, rank_df, text_long=100, text_size=30, title_size=35, row_count=5):
     change_cell_font_and_size(rank_table.cell(0, 0), title_size)
     change_cell_font_and_size(rank_table.cell(0, 1), title_size)
-    for j in range(5):
+    for j in range(row_count):
         rank_table.cell(j+1, 0).text = str(j+1)
         change_cell_font_and_size(rank_table.cell(j+1, 0), text_size)
         title = textwrap.wrap(rank_df.iloc[j, 0], text_long)
@@ -148,7 +148,7 @@ col_list = ['再生数', '高評価-低評価比率', '高評価数', '高評価
             'コメント数', 'コメント数(再生数比x1000)', '長さ(分)']
 des_rank_df = []
 asc_rank_df = []
-for i, col in enumerate(col_list):
+for col in col_list:
     des_rank_df.append(make_rank_df(df_rank_2, df_video_this_week, col, 'タイトル'))
     asc_rank_df.append(make_rank_df(df_rank_3, df_video_this_week, col, 'タイトル'))
 
@@ -190,58 +190,37 @@ make_rank_table(duration_rank_table, des_rank_df[8], text_long=35, text_size=25,
 make_rank_table(duration_rank2_table, asc_rank_df[8], text_long=35, text_size=25, title_size=30)
 
 # 伸びのランキング(今週)
+
+
+def make_nobi_rank_slide(nobi_list, slide, video_count, option, rank_df, base_df):
+    for j, title_nobi in enumerate(nobi_list):
+        if j == 0:
+            nobi_table_x = 50
+            text_long = 45
+            col_2_width = 800
+        elif j == 1:
+            nobi_table_x = 1000
+            text_long = 30
+            col_2_width = 550
+        elif j == 2:
+            nobi_table_x = 1700
+        nobi_table = make_table(slide, video_count, nobi_table_x, 50, 70, col_2_width, 'Rank', option+'投稿動画の' + title_nobi + 'のランキング', col_q=3, col_3_w=60)
+        nobi_table.cell(0, 2).text = '伸び'
+        nobi_rank = make_rank_df(rank_df, base_df, title_nobi, 'タイトル', row_count=video_count)
+        nobi_rank = nobi_rank[nobi_rank[title_nobi] != 0]
+        make_rank_table(nobi_table, nobi_rank, text_long, 18, 20, row_count=len(nobi_rank))
+
+
 nobi_slide = add_slide(weekly_ppt)
-nobi_table_y = 50
-for title_nobi in ['伸び12時間', '伸び48時間', '伸び96時間']:
-    nobi_row_num = 10
-    nobi_table = make_table(nobi_slide, nobi_row_num, 370, nobi_table_y, 80, 1500, '順位', '今週投稿動画の' + title_nobi + 'のランキング', col_q=3)
-    nobi_table_y += 420
-    nobi_table.columns[2].width = Pt(80)
-    nobi_table.cell(0, 2).text = '伸び'
-    change_cell_font_and_size(nobi_table.cell(0, 0), 20)
-    change_cell_font_and_size(nobi_table.cell(0, 1), 25)
-    change_cell_font_and_size(nobi_table.cell(0, 2), 20)
-    nobi_rank = df_video_this_week[df_rank_2[title_nobi] == 1][['タイトル', title_nobi]]
-    for i in range(row_num):
-        nobi_rank = pd.concat([nobi_rank, df_video_this_week[df_rank_2[title_nobi] == i+2][['タイトル', title_nobi]]])
-    nobi_rank = nobi_rank[nobi_rank[title_nobi] != 0]
-    for i in range(nobi_row_num):
-        nobi_table.cell(i+1, 0).text = str(i + 1)
-        change_cell_font_and_size(nobi_table.cell(i+1, 0), 22)
-        nobi_table.cell(i+1, 1).text = str(nobi_rank.iloc[len(nobi_rank)-1-i, 0])
-        change_cell_font_and_size(nobi_table.cell(i+1, 1), 22)
-        nobi_table.cell(i+1, 2).text = str(nobi_rank.iloc[len(nobi_rank)-1-i, 1])
-        change_cell_font_and_size(nobi_table.cell(i+1, 2), 22)
-
-# 伸びのランキング(先週)
-df_rank_last = df_video_last_week.rank(numeric_only=True, ascending=False, method='dense')
+make_nobi_rank_slide(['伸び12時間', '伸び48時間', '伸び96時間'], nobi_slide, row_num, '今週', df_rank_3, df_video_this_week)
 nobi_last_slide = add_slide(weekly_ppt)
-nobi_last_table_y = 50
-for title_nobi_last in ['伸び12時間', '伸び48時間', '伸び96時間', '伸び144時間', '伸び192時間', '伸び240時間']:
-    nobi_last_row_num = 5
-    nobi_last_table = make_table(nobi_last_slide, nobi_last_row_num, 370, nobi_last_table_y, 80, 1500, '順位', '先週投稿動画の'+title_nobi_last+'のランキング', col_q=3)
-    nobi_last_table_y += 210
-    nobi_last_table.columns[2].width = Pt(80)
-    nobi_last_table.cell(0, 2).text = '伸び'
-    change_cell_font_and_size(nobi_last_table.cell(0, 0), 20)
-    change_cell_font_and_size(nobi_last_table.cell(0, 1), 25)
-    change_cell_font_and_size(nobi_last_table.cell(0, 2), 20)
-    nobi_last_rank = df_video_last_week[df_rank_last[title_nobi_last] == 1][['タイトル', title_nobi_last]]
-    for i in range(row_num):
-        nobi_last_rank = pd.concat(
-            [nobi_last_rank, df_video_last_week[df_rank_last[title_nobi_last] == i + 2][['タイトル', title_nobi_last]]])
-    nobi_last_rank = nobi_last_rank[nobi_last_rank[title_nobi_last] != 0]
-    for i in range(nobi_last_row_num):
-        nobi_last_table.cell(i + 1, 0).text = str(i + 1)
-        change_cell_font_and_size(nobi_last_table.cell(i + 1, 0), 20)
-        nobi_last_table.cell(i + 1, 1).text = str(nobi_last_rank.iloc[len(nobi_last_rank) - 1 - i, 0])
-        change_cell_font_and_size(nobi_last_table.cell(i + 1, 1), 20)
-        nobi_last_table.cell(i + 1, 2).text = str(nobi_last_rank.iloc[len(nobi_last_rank) - 1 - i, 1])
-        change_cell_font_and_size(nobi_last_table.cell(i + 1, 2), 20)
-add_slide(weekly_ppt)
-weekly_ppt.save(folders + "/weekly.pptx")
+df_rank_last = df_video_last_week.rank(numeric_only=True, ascending=True, method='dense')
+make_nobi_rank_slide(['伸び12時間', '伸び48時間', '伸び96時間'], nobi_last_slide, len(df_video_last_week), '先週', df_rank_last, df_video_last_week)
+nobi_last_slide_2 = add_slide(weekly_ppt)
+make_nobi_rank_slide(['伸び144時間', '伸び192時間', '伸び240時間'], nobi_last_slide_2, len(df_video_last_week), '先週', df_rank_last, df_video_last_week)
 
-
+weekly_ppt.save(folders + '/weekly.pptx')
+exit()
 # 動画ごとのスライド
 def make_daily_pptx(option, df, df_rank):
     daily_ppt = Presentation()

@@ -24,6 +24,7 @@ def make_basedata():
 
 
 # make_basedata()
+
 df_base = pd.read_excel('H:/Projects/Glaphs/basedata.xlsx')
 print(df_base)
 font = 'MS Gothic'

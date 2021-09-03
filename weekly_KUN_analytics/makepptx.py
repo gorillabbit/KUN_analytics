@@ -49,7 +49,7 @@ def make_table(slide_name, row_q, x, y, col_1_w, col_2_w, col_1_title, col_2_tit
         table.columns[2].width = Pt(col_3_w)
     if style == 'red':
         tbl = table._graphic_frame.element.graphic.graphicData.tbl
-        style_id = '{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}' #UUIDはgithub参照
+        style_id = '{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}'# UUIDはgithub参照
         tbl[0][-1].text = style_id
     return table
 
@@ -59,15 +59,10 @@ def change_cell_font_and_size(cell, size, font='M+ 2p medium'):
     cell.text_frame.paragraphs[0].font.name = font
 
 
-def change_text_font_and_size(text, font, size):
-    text.text_frame.paragraphs[0].font.size = Pt(size)
-    text.text_frame.paragraphs[0].font.name = font
-
-
 def make_text(slide, x, y, inner_text, font_size=35, font='M+ 2p heavy'):
     text = slide.shapes.add_textbox(Pt(x), Pt(y), Pt(100), Pt(50))
     text.text_frame.text = inner_text
-    change_text_font_and_size(text, font, font_size)
+    change_cell_font_and_size(text, font_size, font)
 
 
 def make_box(slide, x, y, w, h):
@@ -114,12 +109,12 @@ def make_rank_table(rank_table, rank_df, text_long=100, text_size=30, title_size
     change_cell_font_and_size(rank_table.cell(0, 0), title_size)
     change_cell_font_and_size(rank_table.cell(0, 1), title_size)
     for j in range(row_count):
-        rank_table.cell(j+1, 0).text = str(j+1)
-        change_cell_font_and_size(rank_table.cell(j+1, 0), text_size)
         title = textwrap.wrap(rank_df.iloc[j, 0], text_long)
+        rank_table.cell(j+1, 0).text = str(j+1)
         rank_table.cell(j+1, 1).text = title[0]
-        change_cell_font_and_size(rank_table.cell(j+1, 1), text_size)
         rank_table.cell(j+1, 2).text = str(round(rank_df.iloc[j, 1],2))
+        change_cell_font_and_size(rank_table.cell(j+1, 0), text_size)
+        change_cell_font_and_size(rank_table.cell(j+1, 1), text_size)
         change_cell_font_and_size(rank_table.cell(j+1, 2), text_size)
 
 
@@ -157,7 +152,6 @@ make_rank_table(like_c_rank2_table, asc_rank_df[2], text_long=27, text_size=20, 
 make_rank_table(unlike_c_rank2_table, asc_rank_df[4], text_long=27, text_size=20, title_size=23)
 make_rank_table(like_unlike_r_rank2_table, asc_rank_df[1], text_long=27, text_size=20, title_size=23)
 
-
 k = 1
 for i, name in enumerate(['高評価数', '低評価数', 'コメント数']):
     count_rank_table = make_table(weekly_slide[i+2], 5, 50, 930, 80, 900, 'Rank', name+'のランキング(上から5本)', col_q=3, col_3_w=100)
@@ -171,15 +165,13 @@ for i, name in enumerate(['高評価数', '低評価数', 'コメント数']):
     make_rank_table(count_per_rank_table, des_rank_df[k], text_long=45, text_size=20, title_size=23)
     make_rank_table(count_per_rank2_table, asc_rank_df[k], text_long=45, text_size=20, title_size=23)
 
-
 duration_rank_table = make_table(weekly_slide[5], 5, 50, 1000, 90, 850,'Rank', '動画の長さのランキング(上から5本)', col_q=3, col_3_w=120)
 duration_rank2_table = make_table(weekly_slide[5], 5, 1250, 1000, 90, 850,'Rank', '動画の長さのランキング(下から5本)', col_q=3, col_3_w=100, style='red')
 make_rank_table(duration_rank_table, des_rank_df[8], text_long=35, text_size=25, title_size=30)
 make_rank_table(duration_rank2_table, asc_rank_df[8], text_long=35, text_size=25, title_size=30)
 
+
 # 伸びのランキング(今週)
-
-
 def make_nobi_rank_slide(nobi_list, slide, video_count, option, base_df):
     nobi_table_x = 50
     text_long = 45
